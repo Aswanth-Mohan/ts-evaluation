@@ -9,23 +9,25 @@ interface Product {
     tags?: string[];
 }
 
-interface NewProduct extends Product{
+interface InventoryProduct extends Product {
     quantity: number;
 }
 
-const calculateInventoryValue=(products:NewProduct[]):number => {
-    let totalValue:number = 0;
-    products.map((product)=>{
-        if(product.inStock){
-            totalValue = totalValue+(product.price*product.quantity);  
+const calculateInventoryValue = (products: InventoryProduct[]): number => {
+    if (!Array.isArray(products) || products.length === 0) {
+        return 0;
+    }
+
+    return products.reduce((totalValue, product) => {
+        if (product.inStock) {
+            return totalValue + Number((product.price * product.quantity).toFixed(2));
         }
-    })
-    return totalValue;
+        return totalValue;
+    }, 0);
 }
 
 
-
-const products: NewProduct[] = [
+const products: InventoryProduct[] = [
     { id: 1, name: "Laptop", price: 999.99, inStock: true, tags: ["electronics"], quantity: 1 },
     { id: 2, name: "Mouse", price: 24.99, inStock: false, quantity: 1  },
     { id: 3, name: "Keyboard", price: 59.99, inStock: true, quantity: 1  },
